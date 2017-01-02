@@ -3,8 +3,9 @@ data Direction = N | S | E | W deriving (Show, Eq)
 type Position = (Int, Int)
 
 data Effect = Effect { flavor :: String
-			         , function :: (IO ()) 
-			     	 }
+                     , function :: (IO ()) 
+                     }
+
 instance Show Effect where
 	show = flavor
 
@@ -13,19 +14,22 @@ instance Show Effect where
 class Positional a where
 	getPos :: a -> Position
 
---data Positional a = Positional { getPos :: a -> Position }
 
 
 data Actor = Actor { friendly :: Bool
-				   , posActor :: Position
-				   } deriving (Show)
+                   , posActor :: Position
+                   } deriving (Show)
+
+
 instance Positional Item where
 	getPos = posActor
 
 data Item = Item { name :: String
-				 , posItem :: Position
-				 , effect :: Effect
-				 } deriving (Show)
+                 , posItem :: Position
+                 , effect :: Effect
+                 } deriving (Show)
+
+
 instance Positional Item where
 	getPos = posItem
 
@@ -34,7 +38,7 @@ instance Positional Item where
 
 
 data Room = Room { description :: String
-				   , actors :: [Actor]
-				   , items :: [Item]
-				   , doors :: [Direction]
-				   } deriving (Show)
+                   , actors :: [Actor]
+                   , items :: [Item]
+                   , doors :: [Direction]
+                   } deriving (Show)
