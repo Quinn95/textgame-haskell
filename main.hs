@@ -35,6 +35,7 @@ data Item = Item { nameItem :: String
 instance Positional Item where
     getPos = posItem
 
+      
 
 data Room = Room { description :: String
                    , actors :: [Actor]
@@ -71,11 +72,31 @@ transitionRoom :: Room -> IO ()
 transitionRoom x = do
     print (description x)
 
+
+
+getCommand :: IO (Maybe Direction)
+getCommand = fmap process prompt where
+  prompt :: IO String
+  prompt = putStr (">>= ") >> getLine
+  process :: String -> Maybe Direction
+  process "n" = Just N
+  process "s" = Just S
+  process "e" = Just E
+  process "w" = Just W
+  process _ = Nothing
+
+doCommand :: Maybe Direction -> IO ()
+doCommand Nothing = print "No instruction"
+doCommand (Just x) = print $ "You did " ++ show x
+
 loop :: StateT GameState IO ()
 loop = do
     st <- get
     let r = room st
-    return ()
+    f <- (lift getCommand)
+    lift $ doCommand f
+    loop
+    --return ()
 
 main = do
     transitionRoom (room initialGameState)
